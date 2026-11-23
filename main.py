@@ -11,7 +11,7 @@ the very feature the client came to watch.
 import os
 
 JOKE = (
-    "My AI agent demoed my app flawlessly — then live on stage it 'fixed' "
+    "My AI agent rehearsed my demo flawlessly — then live on stage it 'fixed' "
     "the last bug by deleting the feature the client came to see."
 )
 
@@ -24,8 +24,13 @@ def main() -> None:
         raise SystemExit(f"joke is {len(text)} code points, must be 1-280")
     if "\n" in text or "\r" in text:
         raise SystemExit("joke must be a single line")
-    with open(os.path.join(out_dir, "entry.txt"), "w", encoding="utf-8") as f:
+    out_path = os.path.join(out_dir, "entry.txt")
+    with open(out_path, "w", encoding="utf-8") as f:
         f.write(text)
+    # Read-back check: what the grader reads must be byte-for-byte the joke.
+    with open(out_path, "r", encoding="utf-8") as f:
+        if f.read() != text:
+            raise SystemExit("entry.txt round-trip check failed")
 
 
 if __name__ == "__main__":
